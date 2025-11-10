@@ -1,0 +1,62 @@
+# ==========================================================
+# GLOBAIS / AMBIENTE
+# ==========================================================
+db/
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+/.vscode
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+
+# ==========================================================
+# BACKEND LARAVEL (PHP)
+# ==========================================================
+
+backend-laravel/.env
+backend-laravel/.env.backup
+backend-laravel/.env.production
+
+backend-laravel/vendor
+backend-laravel/node_modules
+backend-laravel/public/build
+backend-laravel/public/hot
+
+
+backend-laravel/*.log
+backend-laravel/storage/
+backend-laravel/public/storage
+backend-laravel/storage/*.key
+backend-laravel/storage/pail
+backend-laravel/.phpunit.result.cache
+backend-laravel/Homestead.json
+backend-laravel/Homestead.yaml
+
+backend-laravel/.fleet
+backend-laravel/.idea
+backend-laravel/.nova
+backend-laravel/.phpunit.cache
+backend-laravel/.vscode
+backend-laravel/.zed
+backend-laravel/.phpactor.json
+backend-laravel/auth.json
+
+
+# ==========================================================
+# IA AGENTS (PYTHON / FASTAPI)
+# ==========================================================
+
+ia-agents/.env
+
+ia-agents/.venv
+ia-agents/__pycache__/
+ia-agents/.pytest_cache
+
+ia-agents/.vscode
+
+ia-agents/uv.lock

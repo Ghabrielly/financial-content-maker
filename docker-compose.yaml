@@ -1,0 +1,53 @@
+services:
+  app:
+    build:
+      context: ./backend-laravel
+      dockerfile: Dockerfile
+    image: app
+    container_name: backend-laravel
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./backend-laravel:/var/www/app
+    networks:
+      - app
+  db:
+    platform: linux/x86_64
+    image: mysql:5.7
+    restart: always
+    container_name: db_content_maker
+    environment:
+      MYSQL_DATABASE: "db"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_USER_HOST: '%'
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app
+  agente-ia:
+      build:
+        context: ./analyzer_agents
+        dockerfile: Dockerfile
+      container_name: ia-analyzer
+      env_file:
+        - ./analyzer_agents/.env
+      ports:
+        - "8001:8000"
+      volumes:
+        - ./analyzer_agents/src:/app/src
+        - ./analyzer_agents/tests:/app/tests
+      networks:
+        - app
+volumes:
+  db_data:
+    driver: local
+networks:
+  app:
+    driver: bridge

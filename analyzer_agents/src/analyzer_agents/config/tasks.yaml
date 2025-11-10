@@ -1,0 +1,11 @@
+task_julia_collect:
+  description: "Colete os dados financeiros chaves (preço atual, variação, P/L, etc.) sobre {topic} e resuma em tópicos."
+  expected_output: 'Um resumo de tópicos com os dados financeiros mais relevantes e atualizados sobre {topic}.'
+
+task_pedro_analyze:
+  description: "Usando o resultado da coleta de dados de Júlia, pesquise o sentimento da mídia sobre {topic} e identifique as cinco notícias mais influentes."
+  expected_output: 'Um resumo analítico de duas partes: 1) Sentimento do mercado, 2) Resumo das notícias-chave sobre {topic}'
+
+task_key_draft:
+  description: "Usando o resumo de dados de Júlia e a análise de mercado de Pedro, escreva uma matéria financeira completa e confiável sobre {topic}."
+  expected_output: 'A matéria sobre {topic} final e completa, pronta para ser revisada pelo Fator Humano.'
