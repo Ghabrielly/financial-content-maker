@@ -8,4 +8,5 @@ enum AuditoriaAcaoEnum
     case DELETAR;
     case APROVAR;
     case REPROVAR;
+    case EDITAR;
 }
