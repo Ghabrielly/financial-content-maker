@@ -30,7 +30,6 @@ class ConteudoController extends Controller
         }
 
         $query->orderBy('created_at', 'desc');
-
         $perPage = (int) $request->input('per_page', 10);
         $conteudos = $query->paginate($perPage);
 
@@ -42,10 +41,10 @@ class ConteudoController extends Controller
      */
     public function gerar(GeracaoRequest $request): JsonResponse
     {
-        $topic = $request->validated('topic');
+        $topic = $request->validated('topico');
         $userId = Auth::id();
 
-        GerarConteudoIA::dispatch($topic);
+        GerarConteudoIA::dispatch($topic, $userId);
 
         return response()->json(
             ['message' => 'Geração de conteúdo iniciada. O conteúdo será criado assim que estiver pronto.'],
@@ -71,6 +70,7 @@ class ConteudoController extends Controller
 
             AuditoriaConteudo::create([
                 'conteudo_id' => $conteudo->id,
+                'user_id' => Auth::id(),
                 'acao' => AuditoriaAcaoEnum::APROVAR,
             ]);
         } catch (Throwable $e) {
@@ -85,17 +85,19 @@ class ConteudoController extends Controller
      */
     public function reprovar(Request $request, Conteudo $conteudo): JsonResponse
     {
-        try {
-            $validated = $request->validate(['motivo_reprovacao' => 'required|string']);
-            /** @var array{motivo_reprovacao: string} $validated */
 
-            $conteudo->reprovar($validated['motivo_reprovacao']);
+        $motivo = $request->validated('motivo_reprovacao');
+
+        try {
+            $conteudo->reprovar($motivo);
 
             AuditoriaConteudo::create([
                 'conteudo_id' => $conteudo->id,
+                'user_id' => Auth::id(),
                 'acao' => AuditoriaAcaoEnum::REPROVAR,
-                'detalhes' => 'Motivo: ' . $validated['motivo_reprovacao'],
+                'detalhes' => 'Motivo: ' . $motivo,
             ]);
+
         } catch (Throwable $e) {
             return response()->json(['error' => $e->getMessage()], 422);
         }
@@ -112,7 +114,7 @@ class ConteudoController extends Controller
 
         try {
 
-            if ($conteudo->status === \App\Enum\ConteudoStatusEnum::REPROVADO) {
+            if ($conteudo->status === ConteudoStatusEnum::REPROVADO) {
                 $conteudo->statusEscritoAposEditarConteudoReprovado();
             }
 
@@ -146,7 +148,9 @@ class ConteudoController extends Controller
 
         AuditoriaConteudo::create([
             'conteudo_id' => $conteudoId,
+            'user_id' => Auth::id(),
             'acao' => AuditoriaAcaoEnum::DELETAR,
+            'detalhes' => 'Conteúdo excluído pelo revisor.'
         ]);
 
         return response()->json(null, 204);
