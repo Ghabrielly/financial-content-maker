@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ConteudoRequest extends FormRequest
+class ReprovacaoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,13 +17,12 @@ class ConteudoRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'topic' => ['sometimes', 'required', 'string', 'min:3', 'max:255'],
-            'conteudo' => ['sometimes', 'required', 'string', 'min:20'],
+            'motivo_reprovacao' => ['required', 'string', 'min:10', 'max:1000'],
         ];
     }
 }
