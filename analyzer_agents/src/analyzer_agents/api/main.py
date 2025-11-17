@@ -10,7 +10,7 @@ app = FastAPI(
 )
 
 
-@app.get("/helthz", tags=["Health"], summary="Health check")
+@app.get("/healthz", tags=["Health"], summary="Health check")
 def helthz():
     """
     Checa se a api está rodando. 
