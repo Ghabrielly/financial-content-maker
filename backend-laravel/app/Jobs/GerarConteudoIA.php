@@ -61,7 +61,7 @@ class GerarConteudoIA implements ShouldQueue
             }
 
             $conteudo = Conteudo::create([
-                'topic' => $this->topic,
+                'topico' => $this->topic,
                 'conteudo' => $materiaGerada,
                 'status' => ConteudoStatusEnum::ESCRITO,
                 'motivo_reprovacao' => null
