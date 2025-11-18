@@ -74,6 +74,7 @@ class GerarConteudoIA implements ShouldQueue
                 'detalhes' => 'Conteúdo criado automaticamente pelo sistema de IA.'
             ]);
 
+            Log::info("Conteúdo gerado com sucesso para o tópico '{$this->topic}' e ID do conteúdo {$conteudo->id}.");
 
         } catch (Exception $e) {
             Log::error("Falha no trabalho GerarConteudoIA contendo o tópico  '{$this->topic}' " . $e->getMessage());
