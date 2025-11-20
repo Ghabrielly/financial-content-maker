@@ -23,7 +23,7 @@ class ConteudoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'topic' => ['sometimes', 'required', 'string', 'min:3', 'max:255'],
+            'topico' => ['sometimes', 'required', 'string', 'min:3', 'max:255'],
             'conteudo' => ['sometimes', 'required', 'string', 'min:20'],
         ];
     }
