@@ -118,6 +118,10 @@ class ConteudoController extends Controller
 
         try {
 
+            if ($conteudo->status === ConteudoStatusEnum::APROVADO) {
+                return response()->json(['error' => 'Conteúdos aprovados não podem ser editados.'], 422);
+            }
+
             if ($conteudo->status === ConteudoStatusEnum::REPROVADO) {
                 $conteudo->statusEscritoAposEditarConteudoReprovado();
             }
