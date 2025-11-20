@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enum\AuditoriaAcaoEnum;
 use App\Http\Requests\GeracaoRequest;
+use App\Http\Requests\ReprovacaoRequest;
 use App\Models\Conteudo;
 use App\Models\AuditoriaConteudo;
 use App\Http\Requests\ConteudoRequest;
@@ -85,19 +86,20 @@ class ConteudoController extends Controller
     /**
      * Reprova um conteúdo específico.
      */
-    public function reprovar(Request $request, Conteudo $conteudo): JsonResponse
+    public function reprovar(ReprovacaoRequest $request, Conteudo $conteudo): JsonResponse
     {
 
-        $motivo = $request->validated('motivo_reprovacao');
+        $data = $request->validated();
+        $motivo_reprovacao = isset($data['motivo_reprovacao']) ? (string) $data['motivo_reprovacao'] : '';
 
         try {
-            $conteudo->reprovar($motivo);
+            $conteudo->reprovar($motivo_reprovacao);
 
             AuditoriaConteudo::create([
                 'conteudo_id' => $conteudo->id,
                 'user_id' => Auth::id(),
                 'acao' => AuditoriaAcaoEnum::REPROVAR,
-                'detalhes' => 'Motivo: ' . $motivo,
+                'detalhes' => 'Motivo: ' . $motivo_reprovacao,
             ]);
 
         } catch (Throwable $e) {
