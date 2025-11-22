@@ -11,6 +11,7 @@ use App\Models\AuditoriaConteudo;
 use App\Enum\ConteudoStatusEnum;
 use App\Enum\AuditoriaAcaoEnum;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Exception;
