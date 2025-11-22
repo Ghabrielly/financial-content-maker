@@ -16,6 +16,7 @@ class AuditoriaConteudo extends Model
      */
     protected $fillable = [
         'conteudo_id',
+        'user_id',
         'acao',
         'detalhes',
     ];
