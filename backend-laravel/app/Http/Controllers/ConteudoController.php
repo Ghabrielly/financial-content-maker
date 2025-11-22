@@ -66,7 +66,7 @@ class ConteudoController extends Controller
     /**
      * Aprova um conteúdo específico.
      */
-    public function aprovar(Conteudo $conteudo): JsonResponse
+    public function aprovar(Request $request, Conteudo $conteudo): JsonResponse
     {
         try {
             $conteudo->aprovar();
@@ -145,17 +145,16 @@ class ConteudoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Conteudo $conteudo): JsonResponse
+    public function destroy(Request $request, Conteudo $conteudo): JsonResponse
     {
         if ($conteudo->status === ConteudoStatusEnum::APROVADO) {
             return response()->json(['error' => 'Conteúdos aprovados não podem ser excluídos.'], 422);
         }
 
-        $conteudoId = $conteudo->id;
         $conteudo->delete();
 
         AuditoriaConteudo::create([
-            'conteudo_id' => $conteudoId,
+            'conteudo_id' => $conteudo->id,
             'user_id' => Auth::id(),
             'acao' => AuditoriaAcaoEnum::DELETAR,
             'detalhes' => 'Conteúdo excluído pelo revisor.'
