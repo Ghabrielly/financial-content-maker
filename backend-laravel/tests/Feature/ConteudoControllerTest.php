@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\Bus;
 uses(RefreshDatabase::class);
 
 it('can list all conteudos with pagination', function () {
+    $user = User::factory()->create();
+
     Conteudo::factory()->count(15)->create();
 
-    $response = $this->getJson('/api/conteudos?per_page=5');
+    $response = $this->actingAs($user)->getJson('/api/conteudos?per_page=5');
 
     $response->assertStatus(200)
         ->assertJsonCount(5, 'data')
@@ -22,10 +24,12 @@ it('can list all conteudos with pagination', function () {
 });
 
 it('can filter conteudos by status', function () {
+    $user = User::factory()->create();
+
     Conteudo::factory()->create(['status' => ConteudoStatusEnum::ESCRITO]);
     Conteudo::factory()->count(2)->create(['status' => ConteudoStatusEnum::APROVADO]);
 
-    $response = $this->getJson('/api/conteudos?status=' . ConteudoStatusEnum::ESCRITO->name);
+    $response = $this->actingAs($user)->getJson('/api/conteudos?status=' . ConteudoStatusEnum::ESCRITO->name);
 
     $response->assertStatus(200)
         ->assertJsonCount(1, 'data')
@@ -37,7 +41,7 @@ it('can start the content generation process', function () {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)->postJson('/api/conteudos/gerar', [
-        'topico' => 'Inteligência Artificial no Desenvolvimento de Software'
+        'topico' => 'NVIDIA'
     ]);
 
     $response->assertStatus(202)
@@ -56,9 +60,11 @@ it('fails to start generation without a topic', function () {
 });
 
 it('can show a specific conteudo', function () {
+    $user = User::factory()->create();
+
     $conteudo = Conteudo::factory()->create();
 
-    $response = $this->getJson("/api/conteudos/{$conteudo->id}");
+    $response = $this->actingAs($user)->getJson("/api/conteudos/{$conteudo->id}");
 
     $response->assertStatus(200)
         ->assertJsonFragment(['id' => $conteudo->id]);
