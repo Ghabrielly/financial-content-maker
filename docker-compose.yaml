@@ -47,7 +47,7 @@ services:
   worker:
     image: app
     container_name: backend-laravel-worker
-    entrypoint: ["php", "artisan", "queue:work", "--verbose", "--tries=3", "--timeout=310"]
+    command: ["php", "artisan", "queue:work", "--verbose", "--tries=3", "--timeout=310"]
     volumes:
         - ./backend-laravel:/var/www/app
     networks:
