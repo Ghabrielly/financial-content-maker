@@ -1,11 +1,6 @@
-// Validar senhas coincidentes
-function validarSenhas(senha, confirmar) {
-  return senha === confirmar;
-}
-
-// Fazer requisição de cadastro
+// Requisição
 async function cadastrarUsuario(nome, email, senha, confirmarSenha) {
-  if (!validarSenhas(senha, confirmarSenha)) {
+  if (senha !== confirmarSenha) {
     alert("As senhas não coincidem!");
     return false;
   }
@@ -30,12 +25,11 @@ async function cadastrarUsuario(nome, email, senha, confirmarSenha) {
     const data = await response.json();
 
     if (response.ok) {
-      alert("Usuário cadastrado com sucesso!");
+      console.log("Usuário cadastrado com sucesso!");
       console.log(data);
-      // Redirecionar para página de login após 1.5 segundos
       setTimeout(() => {
-        window.location.href = "/index.html";
-      }, 1500);
+        window.location.href = "/frontend/index.html";
+      }, 500);
       return true;
     } else {
       alert("Erro: " + (data.message || "Verifique os dados e tente novamente."));
@@ -50,7 +44,7 @@ async function cadastrarUsuario(nome, email, senha, confirmarSenha) {
   }
 }
 
-// Inicializar listeners quando o DOM carregar
+
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.querySelector("form");
   

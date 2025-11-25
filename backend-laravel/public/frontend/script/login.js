@@ -1,25 +1,17 @@
-// Fazer login e salvar token
-
 async function fazerLogin(email, senha) {
   const baseUrl = window.location.origin;
-  // Detectar nome do navegador/cliente para device_name
-  function getBrowserName() {
-    try {
-      if (typeof navigator === 'undefined') return 'unknown';
-      const ua = navigator.userAgent || '';
-      if (/Firefox\//.test(ua)) return 'Firefox';
-      if (/Edg\//.test(ua) || /Edge\//.test(ua)) return 'Edge';
-      if (/OPR\//.test(ua) || /Opera/.test(ua)) return 'Opera';
-      if (/Chrome\//.test(ua) && /Safari\//.test(ua) && !/Edg\//.test(ua) && !/OPR\//.test(ua)) return 'Chrome';
-      if (/Safari\//.test(ua) && !/Chrome\//.test(ua)) return 'Safari';
-      if (navigator.userAgentData && navigator.userAgentData.brands) {
-        return navigator.userAgentData.brands.map(b => b.brand).join(', ');
-      }
-      return 'browser';
-    } catch (e) {
-      return 'unknown';
-    }
-  }
+//Device Name 
+ function getBrowserName() {
+  const ua = navigator.userAgent;
+
+  if (ua.includes("Firefox")) return "Firefox";
+  if (ua.includes("Edg")) return "Edge";
+  if (ua.includes("OPR") || ua.includes("Opera")) return "Opera";
+  if (ua.includes("Chrome") && !ua.includes("Edg") && !ua.includes("OPR")) return "Chrome";
+  if (ua.includes("Safari")) return "Safari";
+
+  return "Browser";
+}
 
   try {
     const deviceName = getBrowserName();
@@ -40,18 +32,14 @@ async function fazerLogin(email, senha) {
     const data = await response.json();
 
     if (response.ok) {
-      // Salvar o token
       salvarToken(data.token);
-      // Salvar informações do usuário para uso na UI
       if (data.user) {
         try { salvarUsuario(data.user); } catch (e) { console.warn('não foi possível salvar usuário', e); }
       }
-      alert("Login realizado com sucesso!");
       console.log("Dados do login:", data);
-      // Redirecionar para a página de análises após 1.5 segundos
       setTimeout(() => {
-        window.location.href = "/analises.html";
-      }, 1500);
+        window.location.href = "/frontend/analises.html";
+      }, 500);
       return true;
     } else {
       alert("Erro: " + (data.message || "Credenciais inválidas."));
@@ -66,7 +54,7 @@ async function fazerLogin(email, senha) {
   }
 }
 
-// Inicializar listeners quando o DOM carregar
+
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.querySelector("form");
   

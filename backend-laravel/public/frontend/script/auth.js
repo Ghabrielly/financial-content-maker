@@ -1,5 +1,3 @@
-// Gerenciar tokens de autenticação usando localStorage
-
 /**
  * Salvar token no localStorage
  */
