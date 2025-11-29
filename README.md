@@ -16,7 +16,7 @@ cd financial-content-maker
 
 2. Subir containers (build):
 ```bash
-
+docker compose up -d --build
 ```
 
 3. Rodar comandos dentro do container do Laravel (prefira `docker exec <nome_container> <comando>`):
