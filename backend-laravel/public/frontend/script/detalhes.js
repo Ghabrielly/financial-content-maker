@@ -9,16 +9,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         const apiBase = window.location.origin; 
-
         const response = await fetch(`${apiBase}/api/conteudos/${id}`, {
             method: "GET",
-            headers: obterHeadersComAuth() 
+            headers: obterHeadersComAuth()
         });
 
-        if (!response.ok) {
-            console.error("Erro HTTP:", response.status);
-            throw new Error("Erro ao buscar dados.");
-        }
+        if (!response.ok) throw new Error("Erro ao buscar dados.");
 
         const data = await response.json(); 
         preencherCampos(data);
@@ -30,19 +26,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function preencherCampos(data) {
-    console.log("👉 Dados recebidos:", data);
-
     document.getElementById("empresa").textContent = data.topico ?? "Não informado";
-
-    document.getElementById("data").textContent =
-        formatarData(data.updated_at);
+    document.getElementById("data").textContent = formatarData(data.updated_at);
 
     const statusEl = document.getElementById("status");
-    statusEl.textContent = data.status ?? "Indefinido";
-    aplicarCorStatus(statusEl, data.status);
+    let status = (data.status ?? "").toUpperCase();
+
+    if (status === "APROVADO") {
+        statusEl.textContent = "APROVADO";
+        document.getElementById("motivo-box").style.display = "none";
+    } else if (status === "REPROVADO") {
+        statusEl.textContent = "REPROVADO";
+        document.getElementById("motivo-box").style.display = "block";
+        document.getElementById("motivo-reprovacao").textContent = data.motivo_reprovacao ?? "...";
+    } else {
+        statusEl.textContent = "PENDENTE";
+        document.getElementById("motivo-box").style.display = "none";
+    }
+
+    aplicarCorStatus(statusEl, status);
 
     document.getElementById("topico").textContent = data.topico ?? "...";
-    document.getElementById("conteudo").textContent = data.conteudo ?? "...";
+    document.getElementById("conteudo").innerHTML = formatarConteudo(data.conteudo ?? "...");
 }
 
 function formatarData(dataISO) {
@@ -64,4 +69,18 @@ function aplicarCorStatus(el, status) {
             el.classList.add("status-pendente");
             break;
     }
+}
+
+function formatarConteudo(texto) {
+    if (!texto) return "";
+
+    let html = texto.replace(/^### (.*)$/gm, '<h4>$1</h4>')
+                    .replace(/^## (.*)$/gm, '<h3>$1</h3>');
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    html = html.replace(/^\* (.*)$/gm, '<li>$1</li>')
+               .replace(/(<li>.*<\/li>)/gms, '<ul>$1</ul>');
+    html = html.replace(/\n/g, '<br>');
+
+    return html;
 }
